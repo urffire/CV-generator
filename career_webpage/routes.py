@@ -1,9 +1,12 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from career_webpage import app, db, bcrypt
 from career_webpage.forms import RegistrationForm, LoginForm, EditUserdataForm, \
     EditUserdataAdminForm, CreateUserForm
 from career_webpage.models import User, Role, UserRoles
 from flask_login import login_user, current_user, logout_user, login_required
+import requests
+
+
 
 def check_role(role_name):
     roles = current_user.roles
@@ -192,3 +195,52 @@ def delete_user(user_id):
 
     flash("User account deleted.", 'success')
     return redirect(url_for('manage_users'))
+
+PROXYCURL_API_KEY = 'yMNOf5XqLO4mtJpjeXGzlg'
+
+@app.route('/fetch_profile', methods=['POST'])
+@login_required
+def fetch_profile():
+    print("asd")
+    linkedin_url = request.json.get('linkedin_url')
+    print(linkedin_url)
+    api_endpoint = 'https://nubela.co/proxycurl/api/v2/linkedin'
+    headers = {'Authorization': 'Bearer ' + PROXYCURL_API_KEY}
+    params = {'url': linkedin_url}
+
+    try:
+        response = requests.get(api_endpoint, params=params, headers=headers)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+
+        profile_data = response.json()
+        return jsonify(profile_data)
+    except requests.RequestException as e:
+        return jsonify(error=str(e)), 500
+
+
+@app.route('/save_profile', methods=['POST'])
+@login_required
+def save_profile():
+    try:
+        # Save the profile data to the database
+        if request.content_type != 'application/json':
+            return jsonify({'message': 'Invalid content type. Expected JSON.'}), 400
+
+        profile_data = request.json  # Assuming the profile data is sent as JSON
+        current_user.set_profile_data(profile_data)
+        db.session.commit()
+        return jsonify({'message': 'Profile saved successfully!'})
+    except Exception as e:
+        print(str(e))
+        return jsonify({'message': 'Failed to save profile data.'}), 500
+
+@app.route('/load_profile')
+@login_required
+def load_profile():
+    try:
+        # Load the profile data from the database
+        loaded_profile_data = current_user.get_profile_data()
+        return jsonify(loaded_profile_data)
+    except Exception as e:
+        print(str(e))
+        return jsonify({'message': 'Failed to load profile data.'}), 500
