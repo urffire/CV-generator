@@ -26,7 +26,16 @@ class User(db.Model, UserMixin):
         self.profile_data = json.dumps(profile_data)
 
     def get_profile_data(self):
-        return json.loads(self.profile_data) if self.profile_data else {}
+        return json.loads(self.profile_data) if self.profile_data else {
+  "city": "",
+  "country": "",
+  "full_name": "",
+  "phone_number": "",
+  "other": "",
+  "summary": "",
+  "education": [],
+  "experiences": []
+}
 
 class Role(db.Model):
     __tablename__ = 'roles'

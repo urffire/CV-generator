@@ -134,9 +134,11 @@
             // Add Education button
             const addEducationButton = document.createElement('button');
             addEducationButton.textContent = '+ Add Education';
-            addEducationButton.onclick = () => createEducationEntry({}, jsonData.education.length);
+            addEducationButton.onclick = () => createEducationEntry({}, document.querySelectorAll('#education-list li').length);
             profileContainer.appendChild(addEducationButton);
             profileContainer.appendChild(document.createElement('br'));
+
+
 
             // Work Experience list
             const experiencesList = document.createElement('ul');
@@ -152,7 +154,7 @@
             // Add Work Experience button
             const addExperienceButton = document.createElement('button');
             addExperienceButton.textContent = '+ Add Work Experience';
-            addExperienceButton.onclick = () => createExperienceEntry({}, jsonData.experiences.length);
+            addExperienceButton.onclick = () => createExperienceEntry({}, document.querySelectorAll('#experiences-list li').length);
             profileContainer.appendChild(addExperienceButton);
             profileContainer.appendChild(document.createElement('br'));
 
@@ -160,15 +162,17 @@
     }
 
     function createEducationEntry(education, index) {
+        index = document.querySelectorAll('#education-list li').length;
+
         const educationItem = document.createElement('li');
         const educationContent = document.createElement('div');
 
-        const schoolNameField = createEditableInput('School Name', `education-school-name-${index}`, education.school);
-        const startField = createEditableInput('Start', `education-starts-at-${index}`, `${formatDate(education.starts_at)}`);
-        const endField = createEditableInput('End', `education-ends-at-${index}`, ` ${formatDate(education.ends_at)}`);
-        const degreeField = createEditableInput('Degree', `education-degree-${index}`, education.degree_name );
-        const fieldOfStudyField = createEditableInput('Field of Study', `education-field-of-study-${index}`, education.field_of_study );
-        const descriptionField = createEditableTextarea('Description', `education-description-${index}`, education.description );
+        const schoolNameField = createEditableInput('School Name', `education-school-name-${index}`, education?.school || '');
+        const startField = createEditableInput('Start', `education-starts-at-${index}`, `${formatDate(education?.starts_at || { "year": 1900, "month": 1, "day": 1 })}`);
+        const endField = createEditableInput('End', `education-ends-at-${index}`, `${formatDate(education?.ends_at) || 'Present'}`, true);
+        const degreeField = createEditableInput('Degree', `education-degree-${index}`, education?.degree_name || '');
+        const fieldOfStudyField = createEditableInput('Field of Study', `education-field-of-study-${index}`, education?.field_of_study || '');
+        const descriptionField = createEditableTextarea('Description', `education-description-${index}`, education?.description || '');
 
         educationContent.appendChild(schoolNameField);
 
@@ -191,14 +195,19 @@
     }
 
     function createExperienceEntry(experience, index) {
+        index = document.querySelectorAll('#experiences-list li').length;
+        const defaultStartDate = formatDate();
+
         const experienceContent  = document.createElement('li');
         const experienceDiv  = document.createElement('div');
 
-        const titleField = createEditableInput('Title', `experience-title-${index}`, experience.title);
-        const companyLinkField = createEditableInput('Company Link', `experience-company-link-${index}`, experience.company_linkedin_profile_url);
-        const startField = createEditableInput('Start', `experience-starts-at-${index}`, `${formatDate(experience.starts_at)}`);
-        const endField = createEditableInput('End', `experience-ends-at-${index}`, ` ${formatDate(experience.ends_at)}`);
-        const descriptionField = createEditableTextarea('Description', `experience-description-${index}`, experience.description );
+        const titleField = createEditableInput('Title', `experience-title-${index}`, experience?.title || '');
+        const companyLinkField = createEditableInput('Company Link', `experience-company-link-${index}`, experience?.company_linkedin_profile_url || '');
+        const startField = createEditableInput('Start', `experience-starts-at-${index}`, `${formatDate(experience?.starts_at || { "year": 1900, "month": 1, "day": 1 })}`);
+        const endField = createEditableInput('End', `experience-ends-at-${index}`, `${formatDate(experience?.ends_at) || 'Present'}`);
+        const descriptionField = createEditableTextarea('Description', `experience-description-${index}`, experience?.description || '');
+
+
 
         experienceDiv.appendChild(titleField);
 
@@ -231,7 +240,6 @@
         inputField.type = 'text';
         inputField.value = value;
         inputField.id = id;
-
         container.appendChild(inputField);
 
         return container;
@@ -266,7 +274,12 @@
         }
 
          function formatDate(date) {
+            console.log(date)
+             if(date === 'Present')
+                return "Present";
+
             if (!date) return "Present";
+
 
             const { year, month, day } = date;
             const formattedDate = new Date(year, month - 1, day);
@@ -277,7 +290,12 @@
 
 
         function parseDate(dateString) {
+            if(dateString==="Present")
+                return "Present";
+            if(dateString === "")
+                return "";
             const [year, month, day] = dateString.split(/[.]/).map(Number);
+
             return { year, month, day };
         }
 
@@ -334,6 +352,7 @@
         function saveProfile() {
 
             jsonData = (getEditedProfileData())
+
             // Send the edited profile data to the server
             fetch('/save_profile', {
                 method: 'POST',
@@ -358,7 +377,10 @@
             .then(response => response.json())
             .then(jsonok => {
                 // Use the loaded profile data to update the display
+
+
                 createProfile(jsonok);
+
                 jsonData = jsonok
 
             })
