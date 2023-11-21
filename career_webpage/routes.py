@@ -2,6 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, jsonify
 from career_webpage import app, db, bcrypt
 from career_webpage.forms import RegistrationForm, LoginForm, EditUserdataForm, \
     EditUserdataAdminForm, CreateUserForm
+from career_webpage.gpt import call_gpt_generate_cv, call_gpt_generate_cl, call_gpt_generate_advice
 from career_webpage.models import User, Role, UserRoles
 from flask_login import login_user, current_user, logout_user, login_required
 import requests
@@ -75,6 +76,10 @@ def cv():
 @app.route("/cover_letter")
 def cover_letter():
     return render_template('cover_letter.html', title='Cover Letter')
+
+@app.route("/career_advice")
+def career_advice():
+    return render_template('career_advice.html', title='Career Advice')
 
 @app.route("/logout")
 def logout():
@@ -241,6 +246,48 @@ def load_profile():
         # Load the profile data from the database
         loaded_profile_data = current_user.get_profile_data()
         return jsonify(loaded_profile_data)
+    except Exception as e:
+        print(str(e))
+        return jsonify({'message': 'Failed to load profile data.'}), 500
+
+@app.route('/generate_cv', methods=['POST'])
+@login_required
+def generate_cv():
+    try:
+        # Load the profile data from the database
+        loaded_profile_data = current_user.get_profile_data()
+        md = call_gpt_generate_cv(loaded_profile_data)
+        print(md)
+        return jsonify({'content': md})
+    except Exception as e:
+        print(str(e))
+        return jsonify({'message': 'Failed to load profile data.'}), 500
+
+
+@app.route('/generate_cl', methods=['POST'])
+@login_required
+def generate_cl():
+    try:
+        job_description = request.json
+
+        # Load the profile data from the database
+        loaded_profile_data = current_user.get_profile_data()
+        md = call_gpt_generate_cl(loaded_profile_data, job_description)
+        print(md)
+        return jsonify({'content': md})
+    except Exception as e:
+        print(str(e))
+        return jsonify({'message': 'Failed to load profile data.'}), 500
+
+
+@app.route('/generate_advice', methods=['POST'])
+@login_required
+def generate_advice():
+    try:
+        loaded_profile_data = current_user.get_profile_data()
+        md = call_gpt_generate_advice(loaded_profile_data)
+        print(md)
+        return jsonify({'content': md})
     except Exception as e:
         print(str(e))
         return jsonify({'message': 'Failed to load profile data.'}), 500

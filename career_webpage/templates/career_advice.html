@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div id="rendered_md"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+
+<script>
+generateAdvice()
+
+async function generateAdvice() {
+    fetch('/generate_advice', {
+        method: 'POST'
+    }).then(response => response.json()).then(data => {
+        console.log(data.content);
+
+        const converter = new showdown.Converter();
+        const text = data.content;
+        const html = converter.makeHtml(text);
+
+        const target = document.getElementById('rendered_md')
+
+        target.innerHTML = html
+    }).catch(error => {
+        console.error('Error:', error);
+        alert('Failed to generate CV.');
+    });
+}
+</script>
+
+{% endblock content %}
