@@ -1,26 +1,45 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div id="rendered_md"></div>
+<h1>Career Advice Generator</h1>
+
+<button type="button" class="btn btn-primary mb-2" onclick="generate_advice()">Generate Advice</button>
+<button type="button" class="btn btn-primary mb-2" onclick="download_md('advice.md')">Download Advice</button>
+
+<!-- Loading Spinner Overlay -->
+<div class="spinner-border-overlay" id="loadingOverlay">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<div class="mt-4 mb-4">
+    <div id="rendered_md"></div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+<script src="{{ url_for('static', filename='markdown.js') }}"></script>
 
 <script>
-generateAdvice()
+update_md(`
+# Career Advice Template
 
-async function generateAdvice() {
+This is where your advice will appear!
+
+The generation is already ongoing, and should finnish in a few seconds!
+`);
+
+generate_advice()
+
+async function generate_advice() {
+    startSpinner()
+
     fetch('/generate_advice', {
         method: 'POST'
     }).then(response => response.json()).then(data => {
         console.log(data.content);
-
-        const converter = new showdown.Converter();
-        const text = data.content;
-        const html = converter.makeHtml(text);
-
-        const target = document.getElementById('rendered_md')
-
-        target.innerHTML = html
+        update_md(data.content)
+        stopSpinner()
     }).catch(error => {
         console.error('Error:', error);
         alert('Failed to generate CV.');

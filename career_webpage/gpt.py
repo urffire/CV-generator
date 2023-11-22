@@ -9,7 +9,7 @@ def call_gpt_generate_cv(user_data):
     json = dumps(user_data)
 
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-1106",
         messages=[
             {
                 "role": "system",
@@ -38,7 +38,7 @@ def call_gpt_generate_cl(user_data, job_description):
     json = dumps(data)
 
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-1106",
         messages=[
             {
                 "role": "system",
@@ -65,7 +65,7 @@ def call_gpt_generate_advice(user_data):
     json = dumps(user_data)
 
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-1106",
         messages=[
             {
                 "role": "system",

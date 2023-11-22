@@ -1,27 +1,3 @@
-async function generateCV() {
-    saveProfile(false)
-
-    fetch('/generate_cv', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }).then(response => response.json()).then(data => {
-        console.log(data.content);
-
-        const converter = new showdown.Converter();
-        const text = data.content;
-        const html = converter.makeHtml(text);
-
-        const target = document.getElementById('rendered_md')
-
-        target.innerHTML = html
-    }).catch(error => {
-        console.error('Error:', error);
-        alert('Failed to generate CV.');
-    });
-}
-
 // Replace this with your actual JSON data or fetch it dynamically
 let jsonData;
 
@@ -215,7 +191,6 @@ function getEditedProfileData() {
 
         summary: document.getElementById('summary').value,
 
-
         education: [],
         experiences: []
     };
@@ -256,7 +231,6 @@ function getValueByField(fieldId) {
 }
 
 function saveProfile(doAlert = true) {
-
     jsonData = getEditedProfileData()
 
     fetch('/save_profile', {
@@ -277,21 +251,16 @@ function saveProfile(doAlert = true) {
 
 function loadProfile() {
     // Request the profile data from the server
-    fetch('/load_profile')
-        .then(response => response.json())
-        .then(jsonok => {
-            // Use the loaded profile data to update the display
+    fetch('/load_profile').then(response =>
+        response.json()
+    ).then(profile => {
+        createProfile(profile);
 
-
-            createProfile(jsonok);
-
-            jsonData = jsonok
-
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to load profile data.');
-        });
+        jsonData = profile
+    }).catch(error => {
+        console.error('Error:', error);
+        alert('Failed to load profile data.');
+    });
 }
 
 loadProfile();
@@ -312,8 +281,6 @@ async function fetchProfile() {
             const profileData = await response.json();
 
             createProfile(profileData)
-
-            // Update your HTML elements with the profile data here
         } else {
             console.error(`Error: ${response.status} - ${response.statusText}`);
         }

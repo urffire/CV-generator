@@ -1,24 +1,64 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<h1>Curriculum Vitae Generator</h1>
+
 <div id="profile-container"></div>
 
-<button onclick="saveProfile()">Save Profile</button>
-<button onclick="loadProfile()">Load Profile</button>
+<button type="button" class="btn btn-primary mb-2" onclick="saveProfile()">Save Profile</button>
+<button type="button" class="btn btn-primary mb-2" onclick="loadProfile()">Load Profile</button>
 
-<br />
+<div class="form-group">
+    <label for="linkedin">LinkedIn Profile URL:</label>
+    <input type="text" id="linkedin" placeholder="LinkedIn Profile URL">
+</div>
 
-<label for="linkedin">LinkedIn Profile URL:</label>
-<input type="text" id="linkedin" placeholder="LinkedIn Profile URL">
+<button type="button" class="btn btn-primary mb-2" onclick="fetchProfile()">Fetch from LinkedIn</button>
 
-<br />
+<button type="button" class="btn btn-primary mb-2" onclick="generate_cv()">Generate CV</button>
+<button type="button" class="btn btn-primary mb-2" onclick="download_md('cv.md')">Download CV</button>
 
-<button onclick="fetchProfile()">Fetch from LinkedIn</button>
-<button onclick="generateCV()">Generate CV</button>
+<!-- Loading Spinner Overlay -->
+<div class="spinner-border-overlay" id="loadingOverlay">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 
-<div id="rendered_md"></div>
+<div class="mt-4 mb-4">
+    <div id="rendered_md"></div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
 <script src="{{ url_for('static', filename='cv.js') }}"></script>
+<script src="{{ url_for('static', filename='markdown.js') }}"></script>
+
+
+<script>
+update_md(`
+# Curriculum Vitae Template
+
+This is where your CV will appear!
+`);
+
+async function generate_cv() {
+    startSpinner()
+    saveProfile(false)
+
+    fetch('/generate_cv', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(response => response.json()).then(data => {
+        console.log(data.content);
+        update_md(data.content)
+        stopSpinner()
+    }).catch(error => {
+        console.error('Error:', error);
+        alert('Failed to generate CV.');
+    });
+}
+</script>
 
 {% endblock content %}

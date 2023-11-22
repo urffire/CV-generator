@@ -8,7 +8,6 @@ from flask_login import login_user, current_user, logout_user, login_required
 import requests
 
 
-
 def check_role(role_name):
     roles = current_user.roles
     role_names = map(lambda r: r.name, roles)
@@ -185,15 +184,21 @@ def manage_users():
     if not check_role('Admin'):
         flash('You have to be admin to access this feature', 'danger')
         return redirect(url_for('home'))
+
     users = User.query.all()
     return render_template('manage_users.html', users=users, title='Manage users')
 
 @app.route("/delete_user/<int:user_id>")
 @login_required
 def delete_user(user_id):
-    if not check_role("Admin") and current_user.id != user_id:
+    if not check_role("Admin"):
         flash("You have to be admin to access this feature", "danger")
         return redirect(url_for('home'))
+
+    if current_user.id == user_id:
+        flash("You cannot delete your own account", "danger")
+        return redirect(url_for('home'))
+
     UserRoles.query.filter_by(user_id=user_id).delete()
     User.query.filter_by(id=user_id).delete()
     db.session.commit()
@@ -206,17 +211,14 @@ PROXYCURL_API_KEY = 'yMNOf5XqLO4mtJpjeXGzlg'
 @app.route('/fetch_profile', methods=['POST'])
 @login_required
 def fetch_profile():
-    print("asd")
     linkedin_url = request.json.get('linkedin_url')
-    print(linkedin_url)
     api_endpoint = 'https://nubela.co/proxycurl/api/v2/linkedin'
     headers = {'Authorization': 'Bearer ' + PROXYCURL_API_KEY}
     params = {'url': linkedin_url}
 
     try:
         response = requests.get(api_endpoint, params=params, headers=headers)
-        response.raise_for_status()  # Raise an exception for HTTP errors
-
+        response.raise_for_status()
         profile_data = response.json()
         return jsonify(profile_data)
     except requests.RequestException as e:
@@ -231,7 +233,7 @@ def save_profile():
         if request.content_type != 'application/json':
             return jsonify({'message': 'Invalid content type. Expected JSON.'}), 400
 
-        profile_data = request.json  # Assuming the profile data is sent as JSON
+        profile_data = request.json
         current_user.set_profile_data(profile_data)
         db.session.commit()
         return jsonify({'message': 'Profile saved successfully!'})
@@ -243,9 +245,8 @@ def save_profile():
 @login_required
 def load_profile():
     try:
-        # Load the profile data from the database
-        loaded_profile_data = current_user.get_profile_data()
-        return jsonify(loaded_profile_data)
+        profile_data = current_user.get_profile_data()
+        return jsonify(profile_data)
     except Exception as e:
         print(str(e))
         return jsonify({'message': 'Failed to load profile data.'}), 500
@@ -254,9 +255,8 @@ def load_profile():
 @login_required
 def generate_cv():
     try:
-        # Load the profile data from the database
-        loaded_profile_data = current_user.get_profile_data()
-        md = call_gpt_generate_cv(loaded_profile_data)
+        profile_data = current_user.get_profile_data()
+        md = call_gpt_generate_cv(profile_data)
         print(md)
         return jsonify({'content': md})
     except Exception as e:
@@ -269,10 +269,8 @@ def generate_cv():
 def generate_cl():
     try:
         job_description = request.json
-
-        # Load the profile data from the database
-        loaded_profile_data = current_user.get_profile_data()
-        md = call_gpt_generate_cl(loaded_profile_data, job_description)
+        profile_data = current_user.get_profile_data()
+        md = call_gpt_generate_cl(profile_data, job_description)
         print(md)
         return jsonify({'content': md})
     except Exception as e:
@@ -284,8 +282,8 @@ def generate_cl():
 @login_required
 def generate_advice():
     try:
-        loaded_profile_data = current_user.get_profile_data()
-        md = call_gpt_generate_advice(loaded_profile_data)
+        profile_data = current_user.get_profile_data()
+        md = call_gpt_generate_advice(profile_data)
         print(md)
         return jsonify({'content': md})
     except Exception as e:
