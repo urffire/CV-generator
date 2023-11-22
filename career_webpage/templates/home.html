@@ -14,59 +14,72 @@
 
 
     <!-- LinkedIn Integration Section -->
-    <div class="container">
-        <header class="header">
-            <h1>LinkedIn Integration</h1>
-        </header>
-        <section class="content">
-            <p>Connect your LinkedIn profile for a seamless experience. Our platform allows you to import your professional history and achievements directly from LinkedIn, simplifying the process of building your resume and ensuring that no detail is missed.</p>
-            <div class="cta">
-                <img src="anchor.png" alt="Anchor" />
+    <!-- LinkedIn Integration Section -->
+    <div class="container" id="card-container">
+        <div>
+            <header class="header">
+                <h1>LinkedIn Integration</h1>
+            </header>
+            <section class="content">
+                <div class="cta">
+                    <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="Anchor" />
+                </div>
+                <p>Connect your LinkedIn profile for a seamless experience. Our platform allows you to import your professional history and achievements directly from LinkedIn, simplifying the process of building your resume and ensuring that no detail is missed.</p>
                 {% if current_user.is_authenticated %}
                 <a href="{{ url_for('cv') }}" class="cta-link">Integrate LinkedIn</a>
                 {% else %}
                 <a href="{{ url_for('register') }}" class="cta-link">Get started</a>
                 {% endif %}
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
 
+
     <!-- CV & Cover Letter Generator Section -->
-    <div class="container">
-        <header class="header">
-            <h1>CV & Cover Letter Generator</h1>
-        </header>
-        <section class="content">
-            <p>Create professional CVs and cover letters tailored to your profile. With our intuitive tools, you can generate documents that stand out to employers and highlight your best qualities, all with just a few clicks.</p>
-            <div class="cta">
-                <img src="anchor.png" alt="Anchor" />
+
+
+    <div class="container" id="card-container">
+        <div>
+            <header class="header">
+                <h1>CV & Cover Letter Generator</h1>
+            </header>
+            
+            <section class="content">
+                <div class="cta">
+                    <img src="{{ url_for('static', filename='img/cv.png') }}" alt="CV" />
+                </div>
+                <p>Create professional CVs and cover letters tailored to your profile. With our intuitive tools, you can generate documents that stand out to employers and highlight your best qualities, all with just a few clicks.</p>
                 {% if current_user.is_authenticated %}
-                <a href="{{ url_for('cover_letter') }}" class="cta-link">Create Documents</a>
+                <a href="{{ url_for('career_advice') }}" class="cta-link">Create Documents</a>
                 {% else %}
                 <a href="{{ url_for('register') }}" class="cta-link">Register</a>
                 {% endif %}
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
+    
 
     <!-- Career Advice Section -->
-    <div class="container">
-        <header class="header">
-            <h1>Career Advice</h1>
-        </header>
-        <section class="content">
-            <p>Receive personalized career advice based on current trends. Our system analyzes the market and provides you with suggestions to enhance your professional growth and increase your job prospects.</p>
-            <div class="cta">
-                <img src="/img/cv.png" alt="CV" />
+    <div class="container" id="card-container">
+        <div>
+            <header class="header">
+                <h1>Career Advice</h1>
+            </header>
+            
+            <section class="content">
+                <div class="cta">
+                    <img src="{{ url_for('static', filename='img/career.png') }}" alt="CV" />
+                </div>
+                <p>Receive personalized career advice based on current trends. Our system analyzes the market and provides you with suggestions to enhance your professional growth and increase your job prospects.</p>
                 {% if current_user.is_authenticated %}
                 <a href="{{ url_for('career_advice') }}" class="cta-link">Get Advice</a>
                 {% else %}
                 <a href="{{ url_for('register') }}" class="cta-link">Create an account</a>
                 {% endif %}
-                
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
+    
 
 
     <!-- Call to Action -->
