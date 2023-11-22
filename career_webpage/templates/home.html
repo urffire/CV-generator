@@ -1,9 +1,39 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home.css') }}">
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Home Page</h1>
-    <br>
-    <h3>Mi legyen a home page? Esetleg valahonnan importáljunk be ide állásajánlatokat linkkel a hirdetőre?</h3>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1>Welcome to Your Career Companion!</h1>
+        <p>Streamline your job application process with ease.</p>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+        <h2>Our Features</h2>
+        <div class="feature">
+            <h3>LinkedIn Integration</h3>
+            <p>Connect your LinkedIn profile for a seamless experience.</p>
+        </div>
+        <div class="feature">
+            <h3>CV & Cover Letter Generator</h3>
+            <p>Create professional CVs and cover letters tailored to your profile.</p>
+        </div>
+        <div class="feature">
+            <h3>Career Advice</h3>
+            <p>Receive personalized career advice based on current trends.</p>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    {% if current_user.is_authenticated %}
+    <div class="call-to-action">
+        <h2>Ready to Jumpstart Your Career?</h2>
+        <a href="{{ url_for('cv') }}" class="btn-register">Create You CV Now</a>
+    </div>
+    {% else %}
+    <div class="call-to-action">
+        <h2>Ready to Jumpstart Your Career?</h2>
+        <a href="{{ url_for('register') }}" class="btn-register">Get Started Now</a>
+    </div>
+    {% endif %}
 {% endblock content %}
-
-
-
