@@ -7,6 +7,106 @@ body {
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
+body {
+  background: #fafafa;
+  color: #333333;
+  margin-top: 5rem;
+}
+.h3class {
+  padding-top: 10px;
+
+}
+
+.buttonadd{
+  margin-left: 10px;
+}
+.indented {
+  margin-left: 10px; /* Adjust the margin as needed for indentation */
+}
+.work-experience-entry {
+  margin-left: 50px;
+
+  padding: 25px; /* Adjust the padding as needed for indentation */
+  background-color: #e6f7ff; /* Light blue background color */
+  border-radius: 10px; /* Optional: add rounded corners */
+}
+
+/* Updated styling for the profile container */
+.profile-container {
+  background: #ffffff;
+  padding: 20px;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+/* Updated styling for section headers (Education, Work Experience) */
+.section-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Updated styling for editable input containers */
+.editable-input-container {
+  margin-bottom: 15px;
+}
+
+/* Updated styling for labels */
+label {
+  font-weight: bold;
+}
+
+/* Updated styling for buttons to match Bootstrap primary color */
+button {
+  background: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+button:active {
+  background: #004080;
+}
+
+/* Updated styling for lists to match Bootstrap styles */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+/* Match Bootstrap alert styles for flash messages */
+.alert {
+  margin-top: 20px;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+/* Adjust spacing for the flash messages */
+.alert:not(:last-child) {
+  margin-bottom: 0;
+}
 
 .site-header .navbar-nav .nav-link {
   color: #cbd5db;

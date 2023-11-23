@@ -30,6 +30,7 @@ class User(db.Model, UserMixin):
   "city": "",
   "country": "",
   "full_name": "",
+            "email":"",
   "phone_number": "",
   "other": "",
   "summary": "",
