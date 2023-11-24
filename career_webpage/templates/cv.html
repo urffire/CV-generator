@@ -1,21 +1,21 @@
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cv.css') }}">
-
 {% extends "layout.html" %}
 {% block content %}
 
 <h1>Curriculum Vitae Generator</h1>
 
 <div id="profile-container"></div>
-<br>
-<button type="button" class="btn btn-primary mb-2" onclick="saveProfile()">Save Profile</button>
+
+<button type="button" class="btn btn-success mb-2" onclick="saveProfile()">Save Profile</button>
 <button type="button" class="btn btn-primary mb-2" onclick="loadProfile()">Load Profile</button>
 
 <div class="form-group">
     <label for="linkedin">LinkedIn Profile URL:</label>
-    <input type="text" id="linkedin" placeholder="LinkedIn Profile URL">
+    <input type="text" class="form-control" id="linkedin" placeholder="LinkedIn Profile URL">
 </div>
 
 <button type="button" class="btn btn-primary mb-2" onclick="fetchProfile()">Fetch from LinkedIn</button>
+
+<br />
 
 <button type="button" class="btn btn-primary mb-2" onclick="generate_cv()">Generate CV</button>
 <button type="button" class="btn btn-primary mb-2" onclick="download_md('cv.md')">Download CV</button>
@@ -47,18 +47,22 @@ async function generate_cv() {
     startSpinner()
     saveProfile(false)
 
-    fetch('/generate_cv', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }).then(response => response.json()).then(data => {
+    fetch('/generate_advice', {
+        method: 'POST'
+    }).then(response => {
+        if (response.ok) {
+            return response.json()
+        }
+
+        throw new Error(response.statusText);
+    }).then(data => {
         console.log(data.content);
         update_md(data.content)
         stopSpinner()
     }).catch(error => {
         console.error('Error:', error);
         alert('Failed to generate CV.');
+        stopSpinner()
     });
 }
 </script>

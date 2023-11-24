@@ -57,7 +57,9 @@ function createProfile(jsonData) {
     // Add Education button
     const addEducationButton = document.createElement('button');
     addEducationButton.textContent = '+ Add Education';
-    addEducationButton.classList.add("buttonadd");
+    addEducationButton.classList.add("btn");
+    addEducationButton.classList.add("btn-primary");
+    addEducationButton.classList.add("mb-2");
     addEducationButton.onclick = () => createEducationEntry({}, document.querySelectorAll('#education-list li').length);
     profileContainer.appendChild(addEducationButton);
     profileContainer.appendChild(document.createElement('br'));
@@ -81,7 +83,9 @@ function createProfile(jsonData) {
     // Add Work Experience button
     const addExperienceButton = document.createElement('button');
     addExperienceButton.textContent = '+ Add Work Experience';
-    addExperienceButton.classList.add("buttonadd");
+    addExperienceButton.classList.add("btn");
+    addExperienceButton.classList.add("btn-primary");
+    addExperienceButton.classList.add("mb-2");
     addExperienceButton.onclick = () => createExperienceEntry({}, document.querySelectorAll('#experiences-list li').length);
     profileContainer.appendChild(addExperienceButton);
     profileContainer.appendChild(document.createElement('br'));
@@ -115,6 +119,9 @@ function createEducationEntry(education, index) {
     // Remove Education button
     const removeEducationButton = document.createElement('button');
     removeEducationButton.textContent = '- Remove Education';
+    removeEducationButton.classList.add("btn");
+    removeEducationButton.classList.add("btn-danger");
+    removeEducationButton.classList.add("mb-2");
     removeEducationButton.onclick = () => removeEntry('education-list', educationItem, false);
     educationContent.appendChild(removeEducationButton);
 
@@ -124,7 +131,6 @@ function createEducationEntry(education, index) {
 }
 
 function createExperienceEntry(experience, index) {
-
     const experienceContent = document.createElement('li');
     const experienceDiv = document.createElement('div');
     experienceContent.classList.add('work-experience-entry');
@@ -147,6 +153,9 @@ function createExperienceEntry(experience, index) {
     // Remove Experience button
     const removeExperienceButton = document.createElement('button');
     removeExperienceButton.textContent = '- Remove Work Experience';
+    removeExperienceButton.classList.add("btn");
+    removeExperienceButton.classList.add("btn-danger");
+    removeExperienceButton.classList.add("mb-2");
     removeExperienceButton.onclick = () => removeEntry('experiences-list', experienceContent, true);
     experienceDiv.appendChild(removeExperienceButton);
 
@@ -184,6 +193,7 @@ function updateExperienceIds() {
 function createEditableInput(label, id, value) {
     const container = document.createElement('div');
     container.classList.add('editable-input-container');
+    container.classList.add('form-group');
 
     const labelElement = document.createElement('label');
     labelElement.textContent = `${label}:  `;
@@ -194,6 +204,7 @@ function createEditableInput(label, id, value) {
     inputField.value = value;
     inputField.id = id;
     inputField.classList.add("indented")
+    inputField.classList.add("form-control")
     container.appendChild(inputField);
 
     return container;
@@ -202,6 +213,7 @@ function createEditableInput(label, id, value) {
 function createEditableTextarea(label, id, value) {
     const container = document.createElement('div');
     container.classList.add('editable-input-container');
+    container.classList.add('form-group');
 
     const labelElement = document.createElement('label');
     labelElement.textContent = `${label}: `;
@@ -212,6 +224,7 @@ function createEditableTextarea(label, id, value) {
     inputField.value = value;
     inputField.id = id;
     inputField.classList.add("indented")
+    inputField.classList.add("form-control")
     container.appendChild(inputField);
 
     return container;

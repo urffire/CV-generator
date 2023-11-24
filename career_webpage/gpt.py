@@ -58,7 +58,6 @@ def call_gpt_generate_cl(user_data, job_description):
     return completion.choices[0].message.content
 
 
-
 def call_gpt_generate_advice(user_data):
     client = OpenAI()
 

@@ -3,7 +3,6 @@ import os
 import platform
 
 
-
 if __name__ == '__main__':
     if platform.system() == 'Windows':
         # Windows file paths

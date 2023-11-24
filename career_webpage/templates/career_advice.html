@@ -8,7 +8,7 @@
 
 <!-- Loading Spinner Overlay -->
 <div class="spinner-border-overlay" id="loadingOverlay">
-    <div class="spinner-border" role="status">
+    <div class="spinner-border text-primary" role="status">
         <span class="sr-only">Loading...</span>
     </div>
 </div>
@@ -36,13 +36,20 @@ async function generate_advice() {
 
     fetch('/generate_advice', {
         method: 'POST'
-    }).then(response => response.json()).then(data => {
+    }).then(response => {
+        if (response.ok) {
+            return response.json()
+        }
+
+        throw new Error(response.statusText);
+    }).then(data => {
         console.log(data.content);
         update_md(data.content)
         stopSpinner()
     }).catch(error => {
         console.error('Error:', error);
-        alert('Failed to generate CV.');
+        alert('Failed to generate Career Advice.');
+        stopSpinner()
     });
 }
 </script>
