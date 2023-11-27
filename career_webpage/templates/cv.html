@@ -47,7 +47,7 @@ async function generate_cv() {
     startSpinner()
     saveProfile(false)
 
-    fetch('/generate_advice', {
+    fetch('/generate_cv', {
         method: 'POST'
     }).then(response => {
         if (response.ok) {

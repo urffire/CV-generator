@@ -100,8 +100,24 @@ function createEducationEntry(education, index) {
     const educationContent = document.createElement('div');
     educationContent.classList.add('work-experience-entry');
     const schoolNameField = createEditableInput('School Name', `education-school-name-${index}`, education?.school || '');
-    const startField = createEditableInput('Start', `education-starts-at-${index}`, education?.starts_at || '');
-    const endField = createEditableInput('End', `education-ends-at-${index}`, education?.ends_at || '');
+    let starts = "Present";
+    if (education?.starts_at != null) {
+        if (education.starts_at.year != null) {
+            starts = `${education?.starts_at?.year} ${education?.starts_at?.month}`
+        } else {
+            starts = education.starts_at
+        }
+    }
+    const startField = createEditableInput('Start', `education-starts-at-${index}`, starts);
+    let ends = "Present";
+    if (education?.ends_at != null) {
+        if (education.ends_at.year != null) {
+            ends = `${education?.ends_at?.year} ${education?.ends_at?.month}`
+        } else {
+            ends = education.ends_at
+        }
+    }
+    const endField = createEditableInput('End', `education-ends-at-${index}`, ends);
     const degreeField = createEditableInput('Degree', `education-degree-${index}`, education?.degree_name || '');
     const fieldOfStudyField = createEditableInput('Field of Study', `education-field-of-study-${index}`, education?.field_of_study || '');
     const descriptionField = createEditableTextarea('Description', `education-description-${index}`, education?.description || '');
@@ -136,8 +152,25 @@ function createExperienceEntry(experience, index) {
     experienceContent.classList.add('work-experience-entry');
     const titleField = createEditableInput('Title', `experience-title-${index}`, experience?.title || '');
     const companyLinkField = createEditableInput('Company Link', `experience-company-link-${index}`, experience?.company_linkedin_profile_url || '');
-    const startField = createEditableInput('Start', `experience-starts-at-${index}`, experience?.starts_at || '');
-    const endField = createEditableInput('End', `experience-ends-at-${index}`, experience?.ends_at || 'Present');
+    let starts = "Present";
+    if (experience?.starts_at != null) {
+        if (experience.starts_at.year != null) {
+            starts = `${experience?.starts_at?.year} ${experience?.starts_at?.month}`
+        } else {
+            starts = experience.starts_at
+        }
+    }
+    const startField = createEditableInput('Start', `experience-starts-at-${index}`, starts);
+
+    let ends = "Present";
+    if (experience?.ends_at != null) {
+        if (experience.ends_at.year != null) {
+            ends = `${experience?.ends_at?.year} ${experience?.ends_at?.month}`
+        } else {
+            ends = experience.ends_at
+        }
+    }
+    const endField = createEditableInput('End', `experience-ends-at-${index}`, ends);
     const descriptionField = createEditableTextarea('Description', `experience-description-${index}`, experience?.description || '');
 
 
